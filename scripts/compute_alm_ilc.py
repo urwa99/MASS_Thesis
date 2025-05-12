@@ -29,13 +29,14 @@ def compute_alm_ilc(almmaps:np.ndarray, alm_size:int, wi:np.ndarray, l_max:int):
 
     almilc = np.zeros((alm_size), dtype=complex)
 
-    for l in range(l_max +1):
+    for l in range(2,l_max +1):
+        ell_idx= l-2
         index= np.zeros((l+1), dtype=int)
         for m in range(l+1):
             index[m]= hp.Alm.getidx(l_max, l, m)
         alm_p = almmaps[:, index]
 
-        alm = np.dot(wi[:,l], alm_p[:,:]) # multiplying (9x384) and (9x1) to get (384x1)=this is for one l (m =0-> l). we iterate over all l
+        alm = np.dot(wi[:,ell_idx], alm_p[:,:]) # multiplying (9x384) and (9x1) to get (384x1)=this is for one l (m =0-> l). we iterate over all l
         '''
         #summing over frequencies. and taking ALL m values for a fixed l. Looping over l means 
         so we get an alm weighted by contributions from all frequencies over all scales.

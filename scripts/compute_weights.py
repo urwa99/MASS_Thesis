@@ -27,11 +27,11 @@ def compute_weights(n_freqs:int, l_max=int, Cl= np.ndarray)-> tuple[np.ndarray, 
     #CMB spectral energy density
     b= np.ones(n_freqs, dtype=float ) #array filled with values of 1. column vector
 
-    wi= np.zeros((n_freqs, l_max+1), dtype=float) #weights
+    wi= np.zeros((n_freqs, l_max-1), dtype=float) #weights
 
     Cl_inv =np.zeros((n_freqs, n_freqs), dtype=float)
 
-    for l in range(l_max+1):
+    for l in range(l_max-1):
 
         Cl_matrix =   Cl[l,:,:]/(2*l +1) #cov matrix for a specific l (nfreqs x nfreqs)
         
@@ -45,5 +45,5 @@ def compute_weights(n_freqs:int, l_max=int, Cl= np.ndarray)-> tuple[np.ndarray, 
         for nf in range(n_freqs):
             wi[:, l] = numerator[:]/denominator# (nfreqs x m) Since this is inside l loop it is only the weight for a specific l. looping will give us the correct shape?
             #w[:,l]= np.maximum(w[:,l], 0)  # Force weights to be non-negative
-            wi[:,l] /= np.sum(wi[:,l], axis=0, keepdims=True)  # Normalize to sum to 1
-    return Cl_inv, wi
+            # wi[:,l] /= np.sum(wi[:,l], axis=0, keepdims=True)  # Normalize to sum to 1
+    return wi
