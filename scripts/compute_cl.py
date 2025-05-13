@@ -44,4 +44,4 @@ def compute_cl(almmaps:np.ndarray, l_max: int, n_freq: int)-> tuple[np.ndarray, 
         for m in range(1, l + 1):  # Sum over m
             Cl[l, :, :] += 2 * np.real(np.outer(almp[:, m], np.conj(almp[:, m])))
     
-    return almp, Cl
+    return Cl
