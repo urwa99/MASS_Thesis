@@ -14,6 +14,6 @@ def generate_noise(nside:int, sigma:float, nfreqs:float) -> np.ndarray:
         noise_maps (np.ndarray): noise map of shape (nfreqs, npix)
     """
     npix = hp.nside2npix(nside)
-    noise_map = np.random.normal(0, sigma, npix)
-    noise_maps = np.tile(noise_map, (nfreqs, 1))
+    noise_maps = np.random.normal(0, sigma, size=(nfreqs,npix))
+    # noise_maps = np.tile(noise_map, (nfreqs, 1))
     return noise_maps
