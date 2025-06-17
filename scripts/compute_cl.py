@@ -31,17 +31,19 @@ def compute_cl(almmaps:np.ndarray, l_max: int, n_freq: int)-> tuple[np.ndarray, 
     Cl = np.zeros((l_max + 1, n_freq, n_freq), dtype=float)
     
     for l in range(l_max + 1):
+        
         index = np.zeros((l + 1), dtype=int)
         
         for m in range(l + 1):
             index[m] = hp.Alm.getidx(l_max, l, m)  # Get Alm index
         
         almp = almmaps[:, index]  # Extract relevant alm values
-        
+        print(f"Computing power spectra {l}")
         # Compute C_l
         Cl[l, :, :] = np.real(np.outer(almp[:, 0], almp[:, 0]))
         
         for m in range(1, l + 1):  # Sum over m
             Cl[l, :, :] += 2 * np.real(np.outer(almp[:, m], np.conj(almp[:, m])))
+        Cl[l]/=(2 * l + 1)  # Normalize by 2l+1
     
     return Cl
