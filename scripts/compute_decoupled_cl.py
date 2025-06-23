@@ -26,7 +26,7 @@ def compute_decoupled_cl( maps: np.ndarray, masks:np.ndarray, X:bool, nsides:int
     # Loop over all pairs of frequency maps (cross-power spectra)
     for i in range(n_freq):
         for j in range(i, n_freq):  # Compute only upper triangle (symmetric matrix)
-            
+            print ("processing map %d" % i)
             # Define the masked fields for the two maps
             f_i = nmt.NmtField(1 - masks, [maps[i, :]], masked_on_input=X, lmax=l_max) 
             f_j = nmt.NmtField(1 - masks, [maps[j, :]], masked_on_input=X, lmax=l_max) 
@@ -36,8 +36,9 @@ def compute_decoupled_cl( maps: np.ndarray, masks:np.ndarray, X:bool, nsides:int
             else:
                 
                 # Compute the coupled power spectrum for (i, j)
-                masked_map_i= (1-masks)*maps[i, :]
-                masked_map_j= (1-masks)*maps[j,:]
+                masked_map_i= masks*maps[i, :]
+                masked_map_j= masks*maps[j,:]
+
                 p_cl[:,i,j]= hp.anafast(masked_map_i, masked_map_j, lmax=l_max)
             
             # p_cl[:, i, j] = nmt.compute_coupled_cell(f_i, f_j)
@@ -45,7 +46,7 @@ def compute_decoupled_cl( maps: np.ndarray, masks:np.ndarray, X:bool, nsides:int
 
 
             # Define a NaMaster binning scheme (no binning)
-            b = nmt.NmtBin.from_lmax_linear(l_max, 1)
+            b = nmt.NmtBin.from_lmax_linear(l_max, 10)
 
             # Create NaMaster workspace and get the coupling matrix
             w = nmt.NmtWorkspace.from_fields(f_i, f_j, b)
