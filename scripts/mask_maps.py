@@ -20,6 +20,6 @@ def mask_maps(map:np.ndarray, masks:np.ndarray, almsize:int, l_max:int, n_freq:i
     masked =np.zeros((n_freq, n_pix))
     almmasked = np.zeros((n_freq, almsize), dtype=complex)
     for nf in range(n_freq):
-        masked[nf,:] =map[nf,:]*(1-masks)
+        masked[nf,:] =map[nf,:]*(masks)
         almmasked[nf,:]= hp.map2alm(masked[nf,:], l_max, mmax=None, iter=0, pol=False)
     return masked, almmasked
